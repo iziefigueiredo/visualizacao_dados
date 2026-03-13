@@ -1,4 +1,4 @@
-#!/home/isadora/visualizacao_dados/venv/bin/python3
+#!/home/isadora/visualizacao_dados/venv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
