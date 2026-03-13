@@ -16,6 +16,15 @@ def remover_colunas(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop(columns=colunas_remover)
 
 
+def tratar_data_hora(df: pd.DataFrame) -> pd.DataFrame:
+    """Quebra data_hora_gmt em duas colunas: data e hora."""
+    df["data_hora_gmt"] = pd.to_datetime(df["data_hora_gmt"])
+    df["data"] = df["data_hora_gmt"].dt.date
+    df["hora"] = df["data_hora_gmt"].dt.hour
+    df = df.drop(columns=["data_hora_gmt"])
+    return df
+
+
 # ====== Pipeline =============================================================
 
 def main():
@@ -25,6 +34,7 @@ def main():
 
     transformacoes = [
         ("Removendo colunas desnecessárias", remover_colunas),
+        ("Quebrando data e hora",            tratar_data_hora),
     ]
 
     for descricao, funcao in transformacoes:
