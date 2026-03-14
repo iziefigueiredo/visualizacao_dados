@@ -27,12 +27,32 @@ def tratar_dias_sem_chuva(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def dropar_nulos(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove registros com NaN nas colunas essenciais para análise."""
+    colunas = ["numero_dias_sem_chuva", "precipitacao", "risco_fogo", "frp"]
+    antes = len(df)
+    df = df.dropna(subset=colunas)
+    depois = len(df)
+    print(f"({antes - depois:,} registros removidos)", end=" ")
+    return df
+
+
 def tratar_data_hora(df: pd.DataFrame) -> pd.DataFrame:
-    """Quebra data_hora_gmt em duas colunas: data e hora."""
+    """Quebra data_hora_gmt em três colunas: data, hora e mes."""
     df["data_hora_gmt"] = pd.to_datetime(df["data_hora_gmt"])
-    df["data"] = df["data_hora_gmt"].dt.date
+    df["data"] = df["data_hora_gmt"].dt.strftime("%Y-%m-%d")
     df["hora"] = df["data_hora_gmt"].dt.hour
+    df["mes"]  = df["data_hora_gmt"].dt.month
     df = df.drop(columns=["data_hora_gmt"])
+    return df 
+
+
+def remover_duplicados(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove registros duplicados gerados na concatenação dos meses."""
+    antes = len(df)
+    df = df.drop_duplicates()
+    depois = len(df)
+    print(f"({antes - depois:,} duplicados removidos)", end=" ")
     return df
 
 
@@ -47,6 +67,8 @@ def main():
         ("Removendo colunas desnecessárias", remover_colunas),
         ("Tratando dias sem chuva",          tratar_dias_sem_chuva),
         ("Quebrando data e hora",            tratar_data_hora),
+        ("Removendo duplicados",             remover_duplicados),
+        ("Dropando nulos",                   dropar_nulos),
     ]
 
     for descricao, funcao in transformacoes:
