@@ -16,6 +16,17 @@ def remover_colunas(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop(columns=colunas_remover)
 
 
+def tratar_dias_sem_chuva(df: pd.DataFrame) -> pd.DataFrame:
+    """Substitui valores negativos por NaN em numero_dias_sem_chuva.
+    Zeros reais são mantidos — indicam que choveu no dia.
+    """
+    import numpy as np
+    df["numero_dias_sem_chuva"] = df["numero_dias_sem_chuva"].where(
+        df["numero_dias_sem_chuva"] >= 0, np.nan
+    )
+    return df
+
+
 def tratar_data_hora(df: pd.DataFrame) -> pd.DataFrame:
     """Quebra data_hora_gmt em duas colunas: data e hora."""
     df["data_hora_gmt"] = pd.to_datetime(df["data_hora_gmt"])
@@ -34,6 +45,7 @@ def main():
 
     transformacoes = [
         ("Removendo colunas desnecessárias", remover_colunas),
+        ("Tratando dias sem chuva",          tratar_dias_sem_chuva),
         ("Quebrando data e hora",            tratar_data_hora),
     ]
 
