@@ -35,3 +35,6 @@ def atribuir_clusters(df: pd.DataFrame, kmeans: KMeans, scaler: StandardScaler) 
     df["cluster"] = df["cluster"].astype("Int64")
 
     return df
+
+if __name__ == "__main__":
+    main()

@@ -15,7 +15,7 @@ output_path.parent.mkdir(parents=True, exist_ok=True)
 
 # ====== Configurações ========================================================
 
-AMOSTRA_TOTAL = 500_000
+AMOSTRA_TOTAL = 5
 RANDOM_STATE  = 42
 
 # ====== Carregamento =========================================================
@@ -53,3 +53,7 @@ df_sample.to_csv(output_path, index=False)
 print(f"\nAmostra salva em: {output_path}")
 print(f"Total de registros: {len(df_sample):,}")
 print(f"Distribuição por cluster:\n{df_sample['cluster'].value_counts().sort_index()}")
+
+
+if __name__ == "__main__":
+    main()

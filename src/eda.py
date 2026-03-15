@@ -295,3 +295,7 @@ plt.close()
 print("OK")
 
 print(f"\nGráficos salvos em: {output_dir}")
+
+
+if __name__ == "__main__":
+    main()

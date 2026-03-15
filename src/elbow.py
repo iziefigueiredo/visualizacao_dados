@@ -68,3 +68,6 @@ plt.grid(True, linestyle="--", alpha=0.5)
 plt.tight_layout()
 plt.savefig(output_path, dpi=150)
 print(f"\nGráfico salvo em: {output_path}")
+
+if __name__ == "__main__":
+    main()
