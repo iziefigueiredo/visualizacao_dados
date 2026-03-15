@@ -27,6 +27,15 @@ def tratar_dias_sem_chuva(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def tratar_risco_fogo(df: pd.DataFrame) -> pd.DataFrame:
+    """Substitui valores negativos por NaN em risco_fogo.
+    Valores válidos vão de 0 a 1.
+    """
+    import numpy as np
+    df["risco_fogo"] = df["risco_fogo"].where(df["risco_fogo"] >= 0, np.nan)
+    return df
+
+
 def dropar_nulos(df: pd.DataFrame) -> pd.DataFrame:
     """Remove registros com NaN nas colunas essenciais para análise."""
     colunas = ["numero_dias_sem_chuva", "precipitacao", "risco_fogo", "frp"]
@@ -44,7 +53,7 @@ def tratar_data_hora(df: pd.DataFrame) -> pd.DataFrame:
     df["hora"] = df["data_hora_gmt"].dt.hour
     df["mes"]  = df["data_hora_gmt"].dt.month
     df = df.drop(columns=["data_hora_gmt"])
-    return df 
+    return df
 
 
 def remover_duplicados(df: pd.DataFrame) -> pd.DataFrame:
@@ -53,6 +62,11 @@ def remover_duplicados(df: pd.DataFrame) -> pd.DataFrame:
     df = df.drop_duplicates()
     depois = len(df)
     print(f"({antes - depois:,} duplicados removidos)", end=" ")
+    return df
+
+def normalizar_frp(df: pd.DataFrame) -> pd.DataFrame:
+    """Normaliza FRP para escala 0-1 usando min-max."""
+    df["frp"] = (df["frp"] - df["frp"].min()) / (df["frp"].max() - df["frp"].min())
     return df
 
 
@@ -66,9 +80,11 @@ def main():
     transformacoes = [
         ("Removendo colunas desnecessárias", remover_colunas),
         ("Tratando dias sem chuva",          tratar_dias_sem_chuva),
+        ("Tratando risco de fogo",           tratar_risco_fogo),
         ("Quebrando data e hora",            tratar_data_hora),
         ("Removendo duplicados",             remover_duplicados),
         ("Dropando nulos",                   dropar_nulos),
+        ("Normalizando FRP",                 normalizar_frp),
     ]
 
     for descricao, funcao in transformacoes:
