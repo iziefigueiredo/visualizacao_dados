@@ -2,23 +2,44 @@ import pandas as pd
 from ydata_profiling import ProfileReport
 from pathlib import Path
 
-# Caminhos
-base_dir     = Path(__file__).resolve().parent.parent
-input_path   = base_dir / "data" / "interim" / "focos_br_2024.parquet"
-output_dir   = base_dir / "reports"
-output_dir.mkdir(parents=True, exist_ok=True)
-output_path  = output_dir / "focos_br_2024_tratado_profile.html"
 
-print("Carregando dados... ", end="", flush=True)
-df = pd.read_parquet(input_path)
-print(f"OK ({len(df):,} registros, {len(df.columns)} colunas)")
+def main():
+    # ====== Caminhos =========================================================
 
-print("Gerando relatório de profiling (pode demorar alguns minutos)...")
-profile = ProfileReport(
-    df,
-    title="Focos de Queimadas e Incêndios — Brasil 2024 ",
-    explorative=True,
-)
+    base_dir   = Path(__file__).resolve().parent.parent
+    output_dir = base_dir / "reports"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-profile.to_file(output_path)
-print(f"Relatório salvo em: {output_path}")
+    perfis = [
+        {
+            "input":  base_dir / "data" / "interim"   / "focos_br_2024_sample_raw.csv",
+            "output": output_dir / "profile_sample_raw.html",
+            "title":  "Focos de Queimadas — Brasil 2024 (amostra bruta)"
+        },
+        {
+            "input":  base_dir / "data" / "processed" / "focos_br_2024_sample.csv",
+            "output": output_dir / "profile_sample_tratado.html",
+            "title":  "Focos de Queimadas — Brasil 2024 (amostra tratada)"
+        },
+    ]
+
+    # ====== Geração dos profiles =============================================
+
+    for perfil in perfis:
+        print(f"\nCarregando {perfil['input'].name}... ", end="", flush=True)
+        df = pd.read_csv(perfil["input"])
+        print(f"OK ({len(df):,} registros, {len(df.columns)} colunas)")
+
+        print("Gerando relatório de profiling (pode demorar alguns minutos)...")
+        profile = ProfileReport(
+            df,
+            title=perfil["title"],
+            explorative=True,
+        )
+
+        profile.to_file(perfil["output"])
+        print(f"Relatório salvo em: {perfil['output']}")
+
+
+if __name__ == "__main__":
+    main()
