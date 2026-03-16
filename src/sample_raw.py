@@ -3,7 +3,7 @@ from pathlib import Path
 
 # ====== Configurações ========================================================
 
-AMOSTRA_TOTAL = 5
+AMOSTRA_TOTAL = 500_000
 RANDOM_STATE  = 42
 
 # ====== Função principal =====================================================

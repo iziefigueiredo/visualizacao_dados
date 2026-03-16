@@ -17,7 +17,7 @@ def main():
 
     dfs = []
 
-    for mes in range(1, 2):
+    for mes in range(1, 13):
         url = f"{base_url}focos_mensal_br_2024{mes:02d}.csv"
         print(f"Baixando mês {mes:02d}/2024... ", end="", flush=True)
 

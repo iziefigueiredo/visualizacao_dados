@@ -45,6 +45,16 @@ def dropar_nulos(df: pd.DataFrame) -> pd.DataFrame:
     print(f"({antes - depois:,} registros removidos)", end=" ")
     return df
 
+def remover_negativos(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove registros com valores negativos em colunas que não admitem negativos."""
+    colunas = ["frp", "precipitacao", "numero_dias_sem_chuva", "risco_fogo"]
+    antes = len(df)
+    for col in colunas:
+        df = df[df[col] >= 0]
+    depois = len(df)
+    print(f"({antes - depois:,} registros removidos)", end=" ")
+    return df
+
 
 def tratar_data_hora(df: pd.DataFrame) -> pd.DataFrame:
     """Quebra data_hora_gmt em três colunas: data, hora e mes."""
@@ -85,6 +95,7 @@ def main():
         ("Removendo duplicados",             remover_duplicados),
         ("Dropando nulos",                   dropar_nulos),
         ("Normalizando FRP",                 normalizar_frp),
+        ("Removendo negativos",              remover_negativos),
     ]
 
     for descricao, funcao in transformacoes:

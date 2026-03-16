@@ -5,5 +5,5 @@ from .sample_raw  import *
 from .transform   import *
 from .elbow       import *
 from .sample      import *
-from .profile     import *
+from .profiling     import *
 from .eda         import *

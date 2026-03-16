@@ -9,7 +9,7 @@ from sample_raw import main as sample_raw
 from transform  import main as transform
 from elbow      import main as elbow
 from sample     import main as sample
-from profile    import main as profile
+from profiling  import main as profiling
 from eda        import main as eda
 
 # ====== Pipeline =============================================================
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         ("3. Transformação dos dados",         transform),
         ("4. Método do Cotovelo (k-means)",    elbow),
         ("5. Amostra estratificada (k-means)", sample),
-        ("6. Profiling",                       profile),
+        ("6. Profiling",                       profiling),
         ("7. Análise exploratória (EDA)",      eda),
     ]
 
