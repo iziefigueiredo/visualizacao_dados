@@ -12,14 +12,18 @@ def main():
 
     perfis = [
         {
-            "input":  base_dir / "data" / "interim"   / "focos_br_2024_sample_raw.csv",
-            "output": output_dir / "profile_sample_raw.html",
-            "title":  "Focos de Queimadas — Brasil 2024 (amostra bruta)"
+            "input":   base_dir / "data" / "raw" / "focos_br_2024.parquet",
+            "output":  output_dir / "profile_raw.html",
+            "title":   "Focos de Queimadas — Brasil 2024 (dados brutos)",
+            "minimal": True,
+            "formato": "parquet"
         },
         {
-            "input":  base_dir / "data" / "processed" / "focos_br_2024_sample.csv",
-            "output": output_dir / "profile_sample_tratado.html",
-            "title":  "Focos de Queimadas — Brasil 2024 (amostra tratada)"
+            "input":   base_dir / "data" / "processed" / "focos_br_2024_sample.csv",
+            "output":  output_dir / "profile_sample_tratado.html",
+            "title":   "Focos de Queimadas — Brasil 2024 (amostra tratada)",
+            "minimal": False,
+            "formato": "csv"
         },
     ]
 
@@ -27,14 +31,20 @@ def main():
 
     for perfil in perfis:
         print(f"\nCarregando {perfil['input'].name}... ", end="", flush=True)
-        df = pd.read_csv(perfil["input"])
+
+        if perfil["formato"] == "parquet":
+            df = pd.read_parquet(perfil["input"])
+        else:
+            df = pd.read_csv(perfil["input"])
+
         print(f"OK ({len(df):,} registros, {len(df.columns)} colunas)")
 
         print("Gerando relatório de profiling (pode demorar alguns minutos)...")
         profile = ProfileReport(
             df,
             title=perfil["title"],
-            explorative=True,
+            minimal=perfil["minimal"],
+            explorative=not perfil["minimal"],
         )
 
         profile.to_file(perfil["output"])

@@ -12,7 +12,7 @@ output_path.parent.mkdir(parents=True, exist_ok=True)
 
 def remover_colunas(df: pd.DataFrame) -> pd.DataFrame:
     """Remove colunas que não agregam análise."""
-    colunas_remover = ["id", "pais", "pais_id", "municipio_id", "estado_id"]
+    colunas_remover = ["id", "pais", "pais_id", "municipio_id", "estado_id", "satelite"]
     return df.drop(columns=colunas_remover)
 
 
@@ -60,7 +60,6 @@ def tratar_data_hora(df: pd.DataFrame) -> pd.DataFrame:
     """Quebra data_hora_gmt em três colunas: data, hora e mes."""
     df["data_hora_gmt"] = pd.to_datetime(df["data_hora_gmt"])
     df["data"] = df["data_hora_gmt"].dt.strftime("%Y-%m-%d")
-    df["hora"] = df["data_hora_gmt"].dt.hour
     df["mes"]  = df["data_hora_gmt"].dt.month
     df = df.drop(columns=["data_hora_gmt"])
     return df

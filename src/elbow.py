@@ -7,7 +7,7 @@ from pathlib import Path
 
 # ====== Configurações ========================================================
 
-COLUNAS_KMEANS = ["lat", "lon", "numero_dias_sem_chuva", "precipitacao", "frp"]
+COLUNAS_KMEANS = ["lat", "lon", "numero_dias_sem_chuva", "precipitacao", "frp", "mes"]
 K_MIN          = 2
 K_MAX          = 11
 RANDOM_STATE   = 42
